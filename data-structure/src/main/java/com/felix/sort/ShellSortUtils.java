@@ -1,10 +1,11 @@
 package com.felix.sort;
 
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 public class ShellSortUtils {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         int[] arr = {2, 5, 1, 4, 9, 0, 7, 6, 3, 8};
         System.out.println(Arrays.toString(arr));
         shellSort(arr);
