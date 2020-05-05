@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +31,8 @@ public class ArticleController {
     @RequestMapping("articleVote")
     public void articleVote(@RequestParam String user, @RequestParam String article) {
         // 当前时间减去一周
-        Long cutOff = System.currentTimeMillis() - ONE_WEEK_IN_SECONDS;
+        long epochSecond = Instant.now().getEpochSecond();
+        Long cutOff = Instant.now().getEpochSecond() - ONE_WEEK_IN_SECONDS;
         // 文章发布的时间+获得的分数 < cutOff : 发布时间过早并且投票分数不高->不能在投票
         Long score = redisUtils.zScore(PREFIX_TIME, article).longValue();
         if (score == null || score < cutOff) {
@@ -62,7 +64,7 @@ public class ArticleController {
     @RequestMapping("articleNegativeVote")
     public void articleNegativeVote(@RequestParam String user, @RequestParam String article) {
         // 当前时间减去一周
-        Long cutOff = System.currentTimeMillis() - ONE_WEEK_IN_SECONDS;
+        Long cutOff = Instant.now().getEpochSecond() - ONE_WEEK_IN_SECONDS;
         // 文章发布的时间+获得的分数 < cutOff : 发布时间过早并且投票分数不高->不能在投票
         Double score = redisUtils.zScore(PREFIX_TIME, article);
         if (score == null || score < cutOff) {
